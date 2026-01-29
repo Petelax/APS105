@@ -1,5 +1,7 @@
 #!/bin/sh
 
+TEMPLATES="${HOME}/APS105"
+
 # check if there's enough arguments
 if [ $# -lt 2 ]; then
     echo "Not enough command line arguments"
@@ -26,8 +28,8 @@ mkdir -p $SUBMISSION
 i=1
 while [ $i -le $PART ]; do
     mkdir -p "lab${LAB}/lab${LAB}part${i}"
-    cp c.template "lab${LAB}/lab${LAB}part${i}/lab${LAB}part${i}.c"
-    cp Makefile.template "lab${LAB}/lab${LAB}part${i}/Makefile"
+    cp "${TEMPLATES}/c.template" "lab${LAB}/lab${LAB}part${i}/lab${LAB}part${i}.c"
+    cp "${TEMPLATES}/Makefile.template" "lab${LAB}/lab${LAB}part${i}/Makefile"
     ln "lab${LAB}/lab${LAB}part${i}/lab${LAB}part${i}.c" "$SUBMISSION/lab${LAB}part${i}.c"
 
     i=$((i+1))

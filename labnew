@@ -1,0 +1,78 @@
+#!/bin/sh
+# labnew - Set up directories for a new APS105 lab.
+# Usage: labnew LAB PARTS
+#
+# Example: labnew 5 3
+#   This creates lab5 with 3 parts.
+#
+# Description:
+#   Creates directory containing subdirectories for each lab part. Each lab 
+#   part directory contains a template c file. Also creates a submission folder
+#   that hard links the c files from each lab part directory.
+#
+# Written by Peter Xiong, 2026
+
+# have a help message
+usage() {
+  cat <<EOF
+Usage: labnew LAB PARTS
+
+Set up directories for a new APS105 lab.
+
+Arguments:
+  LAB       Lab number (e.g. 5)
+  PARTS     Number of parts (e.g. 3)
+
+Example: labsubmit 5 3
+EOF
+}
+
+case "$1" in
+  -h|--help) usage; exit 0 ;;
+esac
+
+TEMPLATES="${XDG_DATA_HOME:-$HOME/.local/share}/aps105"
+
+# check if there's enough arguments
+if [ $# -lt 2 ]; then
+    echo "Not enough command line arguments"
+    echo "Try: labnew --help"
+    exit 1
+fi
+
+LAB=$1
+PART=$2
+
+# check if the arguments are numerical
+case "$LAB" in
+    ''|*[!0-9]*) echo "Lab not a number" ; exit 1 ;;
+esac
+
+case "$PART" in
+    ''|*[!0-9]*) echo "Part not a number" ; exit 1 ;;
+esac
+
+# check if lab already exists
+for d in lab*; do
+    [ -d "$d" ] || continue
+    num=${d#lab}
+    if [ $LAB -eq $num ]; then
+        echo "lab already exists"
+        exit 1
+    fi
+done
+
+# make submission folder
+SUBMISSION="lab${LAB}/submission"
+mkdir -p $SUBMISSION
+
+# make folders
+i=1
+while [ $i -le $PART ]; do
+    mkdir -p "lab${LAB}/lab${LAB}part${i}"
+    cp "${TEMPLATES}/c.template" "lab${LAB}/lab${LAB}part${i}/lab${LAB}part${i}.c"
+    ln "lab${LAB}/lab${LAB}part${i}/lab${LAB}part${i}.c" "$SUBMISSION/lab${LAB}part${i}.c"
+
+    i=$((i+1))
+done
+

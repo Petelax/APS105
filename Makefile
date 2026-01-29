@@ -1,28 +1,29 @@
-# Makefile for APS105 compilation and exercises
-# Written by Peter Xiong, 2026.
-# 
-# Builds all c files in working directory into an executable with the same name.
+# Makefile to install aps105 tools
 
-.PHONEY: build exercise clean
+.PHONY: all install uninstall
 
-CC := gcc
-FLAGS := -Wall -Wextra -lm
+XDG_DATA_HOME ?= $(HOME)/.local/share
+XDG_BIN_HOME ?= $(HOME)/.local/bin
+DATA := $(XDG_DATA_HOME)/aps105
+BIN := $(XDG_BIN_HOME)
 
-SRC := $(wildcard *.c)
-TARGET := $(basename $(firstword $(SRC)))
+all:
+	@echo "run \"make install\" to install"
+	@echo "run \"make uninstall\" to uninstall"
 
-LAB := $(word 1,$(subst part, ,$(subst lab,,$(TARGET))))
+install:
+	@mkdir -p $(DATA)
+	@cp aps105.mk $(DATA)/aps105.mk
+	@cp c.template $(DATA)/c.template
+	@mkdir -p $(BIN)
+	@cp labnew $(BIN)/labnew
+	@cp labmake $(BIN)/labmake
+	@chmod +x $(BIN)/labnew
+	@chmod +x $(BIN)/labmake
 
-build: $(TARGET)
-
-$(TARGET): $(SRC)
-	$(CC) $(SRC) $(FLAGS) -o $(TARGET)
-
-run: build
-	./$(TARGET)
-
-exercise: build
-	~aps105i/public/exercise $(LAB) $(TARGET)
-
-clean:
-	rm -f $(TARGET)
+uninstall:
+	@rm -f $(DATA)/aps105.mk
+	@rm -f $(DATA)/c.template
+	@rmdir $(DATA) 2>/dev/null || true
+	@rm -f $(BIN)/labnew
+	@rm -f $(BIN)/labmake

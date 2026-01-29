@@ -1,0 +1,2 @@
+#!/bin/sh
+exec make -f "${XDG_DATA_HOME:-$HOME/.local/share}/aps105/aps105.mk" "$@"

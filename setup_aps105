@@ -1,0 +1,35 @@
+#!/bin/sh
+
+# check if there's enough arguments
+if [ $# -lt 2 ]; then
+    echo "Not enough command line arguments"
+    exit 1
+fi
+
+LAB=$1
+PART=$2
+
+# check if the arguments are numerical
+case "$LAB" in
+    ''|*[!0-9]*) echo "Lab not a number" ; exit 1 ;;
+esac
+
+case "$PART" in
+    ''|*[!0-9]*) echo "Part not a number" ; exit 1 ;;
+esac
+
+# make submission folder
+SUBMISSION="lab${LAB}/submission"
+mkdir -p $SUBMISSION
+
+# make folders
+i=1
+while [ $i -le $PART ]; do
+    mkdir -p "lab${LAB}/lab${LAB}part${i}"
+    cp c.template "lab${LAB}/lab${LAB}part${i}/lab${LAB}part${i}.c"
+    cp Makefile.template "lab${LAB}/lab${LAB}part${i}/Makefile"
+    ln "lab${LAB}/lab${LAB}part${i}/lab${LAB}part${i}.c" "$SUBMISSION/lab${LAB}part${i}.c"
+
+    i=$((i+1))
+done
+

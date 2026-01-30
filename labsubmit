@@ -1,0 +1,49 @@
+#!/bin/sh
+# labsubmit - Submit a lab
+# Usage: labsubmit
+#
+# Description:
+# Submit lab of the directory you are currently in.
+#
+# Written by Peter Xiong, 2026
+
+# have a help message
+usage() {
+  cat <<EOF
+Usage: labsubmit
+
+Submit lab of the directory you are currently in.
+EOF
+}
+
+case "$1" in
+  -h|--help) usage; exit 0 ;;
+esac
+
+# get current working directory
+current_directory=$(pwd)
+base=$(basename "${current_directory}")
+labfolder=$(basename $(dirname ${current_directory}))
+
+# check if in submission folder
+if [ "$base" != "submission" ]; then
+    echo "Not in submission folder"
+    exit 1
+fi
+
+# check if in labN/submission and gets N into $LAB
+case "$labfolder" in
+    lab[0-9]*) LAB=${labfolder#lab} ;; 
+    *) echo "Must be in a submission folder in a lab folder" ; exit 1 ;;
+esac
+
+printf "Are you sure you would like to submit lab %s? " "$LAB"
+read answer
+
+answer=$(echo ${answer} | tr "[:lower:]" "[:upper:]")
+
+if [ "$answer" != "Y" ] && [ "$answer" != "YES" ]; then
+    exit 0
+fi
+
+~aps105i/public/submit $LAB

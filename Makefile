@@ -18,6 +18,7 @@ install:
 	@mkdir -p $(BIN)
 	@cp labnew $(BIN)/labnew
 	@cp labmake $(BIN)/labmake
+	@cp labsubmit $(BIN)/labsubmit
 	@chmod +x $(BIN)/labnew
 	@chmod +x $(BIN)/labmake
 
@@ -26,4 +27,5 @@ uninstall:
 	@rm -f $(DATA)/c.template
 	@rmdir $(DATA) 2>/dev/null || true
 	@rm -f $(BIN)/labnew
+	@rm -f $(BIN)/labsubmit
 	@rm -f $(BIN)/labmake

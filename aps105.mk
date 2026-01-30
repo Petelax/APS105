@@ -4,7 +4,7 @@
 # Builds all c files in working directory into an executable with the same name.
 # Also runs exercises according to file name.
 
-.PHONY: build exercise run clean
+.PHONY: build exercise run clean help
 
 CC := gcc
 FLAGS := -Wall -Wextra -lm
@@ -27,3 +27,14 @@ exercise: build
 
 clean:
 	rm -f $(TARGET)
+
+help:
+	@echo "Usage:"
+	@echo "  labmake build			Compiles code"
+	@echo "  labmake run			Compile and runs code"
+	@echo "  labmake exercise		Run exercise"
+	@echo "  labmake help 			Help"
+	@echo ""
+	@echo "Build, run, and exercise APS105 lab."
+	@echo ""
+	@echo "Example: labmake build"
